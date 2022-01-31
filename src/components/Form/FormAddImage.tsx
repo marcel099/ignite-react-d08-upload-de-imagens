@@ -24,12 +24,16 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
       },
       validate: {
         lessThan10MB: (value) => {
-          console.log({lessThan10MBValue: value})
-          return true || 'O arquivo deve ser menor que 10MB'
+          if (value[0].size < 10000000)
+            return true
+          else
+            return 'O arquivo deve ser menor que 10MB'
         },
         acceptedFormats: (value) => {
-          console.log({acceptedFormatsValue: value})
-          return true || 'Somente são aceitos arquivos PNG, JPEG e GIF'
+          if (['image/jpeg', 'image/png', 'image/gif'].includes(value[0].type))
+            return true
+          else
+            return 'Somente são aceitos arquivos PNG, JPEG e GIF'
         },
       }
     },
@@ -61,8 +65,12 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
 
   const queryClient = useQueryClient();
   const mutation = useMutation(async (data: Record<string, unknown>) => {
+    const { title, description } = data
+
     await api.post('/api/images', {
-      data,
+      url: imageUrl,
+      title,
+      description
     })
   }, {
     onSuccess: () => queryClient.invalidateQueries(['images']),
@@ -87,6 +95,8 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
           status: 'warning',
           isClosable: true,
         })
+
+        return
       }
 
       await mutation.mutateAsync(data)
