@@ -37,29 +37,27 @@ export default function Home(): JSX.Element {
   }, [data]);
 
   return (
-    <>
-      {isLoading && (
-        <Loading />
-      ) ? isError && (
-        <Error />
-      ) : (
-        <>
-          <Header />
+    isLoading ? (
+      <Loading />
+    ) : isError ? (
+      <Error />
+    ) : (
+      <>
+        <Header />
 
-          <Box maxW={1120} px={20} mx="auto" my={20}>
-            <CardList cards={formattedData} />
-            {hasNextPage && (
-              <Button
-                color="pGray.50"
-                mt="2.5rem"
-                onClick={() => fetchNextPage()}
-              >
-                {!isFetchingNextPage ? 'Carregar mais' : 'Carregando...'}
-              </Button>
-            )}
-          </Box>
-        </>
-      )}
-     </>
-  );
+        <Box maxW={1120} px={20} mx="auto" my={20}>
+          <CardList cards={formattedData} />
+          {hasNextPage && (
+            <Button
+              color="pGray.50"
+              mt="2.5rem"
+              onClick={() => fetchNextPage()}
+            >
+              {!isFetchingNextPage ? 'Carregar mais' : 'Carregando...'}
+            </Button>
+          )}
+        </Box>
+      </>
+    )
+  )
 }
