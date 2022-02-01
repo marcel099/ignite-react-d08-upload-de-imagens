@@ -33,7 +33,10 @@ export default function Home(): JSX.Element {
   );
 
   const formattedData = useMemo(() => {
-    return data?.pages[0].data.data
+    return data?.pages.reduce((accumulatedData, page) => {
+      accumulatedData.push(page.data.data)
+      return accumulatedData.flat()
+    }, [])
   }, [data]);
 
   return (
